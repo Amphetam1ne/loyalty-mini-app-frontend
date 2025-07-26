@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Карта лояльности</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
             margin: 0;
@@ -25,7 +24,6 @@
             position: relative;
         }
 
-        /* Фон с частицами (лёгкая анимация) */
         body::before {
             content: '';
             position: absolute;
@@ -52,12 +50,28 @@
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.18);
             padding: 30px 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             color: white;
             text-align: center;
-            transition: transform 0.3s ease;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            animation: fadeInScale 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+                filter: blur(2px);
+            }
+            70% {
+                transform: scale(1.02) translateY(-5px);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
         }
 
         .title {
@@ -88,20 +102,11 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Анимации */
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
 
-        /* Адаптация под светлую тему Telegram */
         @media (prefers-color-scheme: light) {
             body {
                 background: #f5f5f7;
@@ -124,6 +129,7 @@
     </style>
 </head>
 <body>
+    <!-- 1. Основной контент -->
     <div class="container">
         <div class="card">
             <div class="title">Привет, <span id="user-name">Гость</span>!</div>
@@ -135,25 +141,46 @@
         </div>
     </div>
 
+    <!-- 2. Подсказка по добавлению на экран -->
+    <div id="install-guide" style="
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.85);
+        color: white;
+        padding: 16px;
+        border-radius: 14px;
+        font-size: 14px;
+        text-align: center;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        display: none;
+    ">
+        <div>Хотите быстрый доступ?</div>
+        <div style="font-size: 12px; color: #ccc;">
+            Нажмите <b>Поделиться</b> → <b>На экран «Домой»</b>
+        </div>
+    </div>
+
+    <!-- 3. Подключаем Telegram SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- 4. Основной скрипт -->
     <script>
-        // Эмуляция (для разработки)
         if (!window.Telegram) {
             window.Telegram = {
                 WebApp: {
                     initDataUnsafe: {
-                        user: {
-                            id: 123456789,
-                            first_name: "Нико"
-                        }
+                        user: { id: 123456789, first_name: "Нико" }
                     },
-                    ready: () => {},
-                    expand: () => {}
+                    ready: () => {}, expand: () => {}
                 }
             };
         }
 
         const user = Telegram.WebApp.initDataUnsafe.user;
-
         if (user) {
             document.getElementById("user-name").textContent = user.first_name;
             document.getElementById("user-id").textContent = "ID: " + user.id;
@@ -161,6 +188,16 @@
 
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
+    </script>
+
+    <!-- 5. Подсказка -->
+    <script>
+        setTimeout(() => {
+            const guide = document.getElementById("install-guide");
+            if (guide) {
+                guide.style.display = "block";
+            }
+        }, 2000);
     </script>
 </body>
 </html>
