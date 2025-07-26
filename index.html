@@ -13,24 +13,32 @@
         }
         h1 {
             font-size: 20px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
-        p {
-            color: #666;
+        .id {
+            font-family: monospace;
             font-size: 14px;
+            color: #666;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Добро пожаловать в систему лояльности</h1>
-    <p>Mini App работает</p>
+    <h1>Привет, <span id="user-name">Пользователь</span>!</h1>
+    <div class="id">Ваш ID: <span id="user-id">—</span></div>
 
     <script>
-        // Готовим интерфейс
-        if (window.Telegram && Telegram.WebApp) {
-            Telegram.WebApp.ready();
-            Telegram.WebApp.expand(); // На весь экран
+        // Получаем данные от Telegram
+        const user = Telegram.WebApp.initDataUnsafe.user;
+
+        if (user) {
+            document.getElementById("user-name").textContent = user.first_name;
+            document.getElementById("user-id").textContent = user.id;
         }
+
+        // Готовим интерфейс
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
     </script>
 </body>
 </html>
