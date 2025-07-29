@@ -176,27 +176,28 @@
 
     <!-- Основной скрипт -->
     <script>
-        // Эмуляция (для разработки)
-        if (!window.Telegram) {
-            window.Telegram = {
-                WebApp: {
-                    initDataUnsafe: {
-                        user: { id: 123456789, first_name: "Нико" }
+    // Эмуляция (для разработки)
+    if (!window.Telegram) {
+        window.Telegram = {
+            WebApp: {
+                initDataUnsafe: {
+                    user: { id: 123456789, first_name: "Нико" }
                     },
-                    ready: () => {}, expand: () => {}
-                }
-            };
-        }
+                ready: () => {}, expand: () => {}
+            }
+        };
+    }
 
-        // Получаем пользователя
-        const user = Telegram.WebApp.initDataUnsafe.user;
-        if (user) {
-            document.getElementById("user-name").textContent = user.first_name;
-        }
+    // Получаем пользователя
+    const user = Telegram.WebApp.initDataUnsafe.user;
+    if (user) {
+        document.getElementById("user-name").textContent = user.first_name;
+        document.getElementById("user-id").textContent = "ID: " + user.id;
+    }
 
-        // Готовим интерфейс
-        Telegram.WebApp.ready();
-        Telegram.WebApp.expand();
-    </script>
+    // Готовим интерфейс
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+</script>
 </body>
 </html>
