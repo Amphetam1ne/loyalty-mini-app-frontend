@@ -90,9 +90,12 @@
 
         .qr-container {
             background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(74, 144, 226, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             margin: 20px 0;
             position: relative;
             overflow: hidden;
@@ -110,11 +113,11 @@
             height: 200%;
             background: linear-gradient(
                 to bottom right,
-                rgba(74, 144, 226, 0.1),
-                rgba(74, 144, 226, 0.2)
+                rgba(74, 144, 226, 0.05),
+                rgba(74, 144, 226, 0.1)
             );
             transform: rotate(30deg);
-            animation: shine 4s infinite;
+            animation: shine 6s infinite;
         }
 
         @keyframes shine {
@@ -135,8 +138,10 @@
             justify-content: center;
             font-size: 14px;
             color: #333;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
             transition: transform 0.3s ease;
         }
 
@@ -149,8 +154,8 @@
             justify-content: space-around;
             width: 100%;
             background: transparent;
-            padding: 20px 0;
-            margin-top: 20px;
+            padding: 25px 0;
+            margin-top: 30px;
             animation: fadeInUp 0.8s ease-out 0.6s both;
         }
 
@@ -162,10 +167,11 @@
             color: #b0b0b0;
             cursor: pointer;
             transition: all 0.3s ease;
-            padding: 15px 10px;
-            border-radius: 15px;
+            padding: 20px 15px;
+            border-radius: 20px;
             position: relative;
             overflow: hidden;
+            min-width: 100px;
         }
 
         .menu-item::before {
@@ -193,44 +199,31 @@
         }
 
         .menu-icon {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 8px;
+            width: 45px;
+            height: 45px;
+            margin-bottom: 10px;
             background: linear-gradient(145deg, #4a90e2, #357abd);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+            box-shadow: 
+                0 6px 20px rgba(74, 144, 226, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
         }
 
         .menu-icon::before {
             content: "●";
             color: white;
-            font-size: 18px;
+            font-size: 20px;
         }
 
         .menu-item:hover .menu-icon {
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.5);
-        }
-
-        /* Дополнительные стили для темной темы */
-        .status-indicator {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 12px;
-            height: 12px;
-            background: #4a90e2;
-            border-radius: 50%;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
+            box-shadow: 
+                0 8px 25px rgba(74, 144, 226, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         /* Анимации для мобильных устройств */
@@ -253,12 +246,13 @@
             }
 
             .menu-item {
-                padding: 12px 8px;
+                padding: 15px 10px;
+                min-width: 80px;
             }
 
             .menu-icon {
-                width: 35px;
-                height: 35px;
+                width: 40px;
+                height: 40px;
             }
 
             /* Оптимизация анимаций для мобильных */
@@ -277,7 +271,7 @@
 
             /* Уменьшаем интенсивность анимаций для экономии батареи */
             .qr-container::before {
-                animation: shine 6s infinite;
+                animation: shine 8s infinite;
             }
         }
 
@@ -307,24 +301,9 @@
                 opacity: 1;
             }
         }
-
-        /* Анимация для точек */
-        .points-animation {
-            animation: pointsGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes pointsGlow {
-            0%, 100% {
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            }
-            50% {
-                text-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="status-indicator"></div>
     <div class="container">
         <!-- Логотип -->
         <img src="logo.png" alt="Логотип" class="logo" id="logo">
@@ -346,19 +325,15 @@
         <div class="bottom-menu">
             <div class="menu-item">
                 <div class="menu-icon"></div>
-                <span>Профиль</span>
+                <span>История покупок</span>
             </div>
             <div class="menu-item">
                 <div class="menu-icon"></div>
-                <span>История</span>
+                <span>Информация о кафе</span>
             </div>
             <div class="menu-item">
                 <div class="menu-icon"></div>
-                <span>Магазины</span>
-            </div>
-            <div class="menu-item">
-                <div class="menu-icon"></div>
-                <span>Настройки</span>
+                <span>Система лояльности</span>
             </div>
         </div>
     </div>
@@ -376,15 +351,6 @@
             // Заглушка QR (замени на реальный генератор)
             const qrData = "user_id:12345"; // Пример данных для QR
             console.log(`QR данные: ${qrData}`);
-
-            // Добавляем анимацию для точек
-            const pointsElement = document.getElementById('points');
-            setInterval(() => {
-                pointsElement.classList.add('points-animation');
-                setTimeout(() => {
-                    pointsElement.classList.remove('points-animation');
-                }, 2000);
-            }, 4000);
         });
     </script>
 </body>

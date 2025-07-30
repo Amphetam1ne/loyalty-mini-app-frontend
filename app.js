@@ -40,20 +40,8 @@ function animateElement(element, delay = 0) {
     }, delay);
 }
 
-// Функция для обновления баллов с анимацией
+// Функция для обновления баллов (без анимации)
 function updatePoints(newPoints) {
-    const currentPoints = parseInt(pointsEl.textContent.match(/\d+/)[0]);
-    const difference = newPoints - currentPoints;
-    
-    // Анимация изменения баллов
-    pointsEl.style.transform = 'scale(1.1)';
-    pointsEl.style.color = difference > 0 ? '#4CAF50' : '#ff6b6b';
-    
-    setTimeout(() => {
-        pointsEl.style.transform = 'scale(1)';
-        pointsEl.style.color = '#4a90e2';
-    }, 300);
-    
     pointsEl.textContent = `${newPoints} баллов`;
 }
 
@@ -173,6 +161,19 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 this.style.boxShadow = 'none';
             }, 300);
+            
+            // Обработка конкретных кнопок
+            switch(menuText) {
+                case 'История покупок':
+                    showPurchaseHistory();
+                    break;
+                case 'Информация о кафе':
+                    showCafeInfo();
+                    break;
+                case 'Система лояльности':
+                    showLoyaltyInfo();
+                    break;
+            }
         });
         
         // Добавляем анимацию при наведении (только для десктопа)
@@ -210,6 +211,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Функции для обработки нажатий на кнопки меню
+function showPurchaseHistory() {
+    console.log('Показываем историю покупок');
+    // Здесь можно добавить логику для отображения истории покупок
+    alert('История покупок будет доступна в следующем обновлении');
+}
+
+function showCafeInfo() {
+    console.log('Показываем информацию о кафе');
+    // Здесь можно добавить логику для отображения информации о кафе
+    alert('Информация о кафе будет доступна в следующем обновлении');
+}
+
+function showLoyaltyInfo() {
+    console.log('Показываем информацию о системе лояльности');
+    // Здесь можно добавить логику для отображения информации о системе лояльности
+    alert('Информация о системе лояльности будет доступна в следующем обновлении');
+}
 
 // Обработка данных пользователя
 if (user) {
@@ -257,17 +277,6 @@ document.getElementById("qr-code").addEventListener('click', function() {
     // Здесь можно добавить функциональность копирования или сканирования
     console.log('QR код нажат');
 });
-
-// Добавляем анимацию для точек каждые 4 секунды
-setInterval(() => {
-    const pointsElement = document.getElementById('points');
-    if (pointsElement) {
-        pointsElement.classList.add('points-animation');
-        setTimeout(() => {
-            pointsElement.classList.remove('points-animation');
-        }, 2000);
-    }
-}, 4000);
 
 // Оптимизация для мобильных устройств
 if ('serviceWorker' in navigator) {
