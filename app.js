@@ -1,29 +1,31 @@
-// Проверяем, в Telegram ли мы (для разработки)
+// Эмуляция (для разработки)
 if (!window.Telegram) {
     window.Telegram = {
         WebApp: {
             initDataUnsafe: {
-                user: { id: 123456789, first_name: "Тестовый", username: "test" }
+                user: { id: 123456789, first_name: "Нико" }
             },
-            ready: () => console.log("Telegram WebApp ready (mock)"),
-            expand: () => console.log("Telegram WebApp expanded (mock)")
+            ready: () => {},
+            expand: () => {}
         }
     };
 }
 
-// Получаем данные пользователя
-const user = Telegram.WebApp.initDataUnsafe.user;
+// Готовим интерфейс
+Telegram.WebApp.ready();
+Telegram.WebApp.expand();
 
-// Находим элементы на странице
+// Получаем пользователя
+const user = Telegram.WebApp.initDataUnsafe.user;
 const userNameEl = document.getElementById("user-name");
-const userIdEl = document.getElementById("user-id");
+const bonusEl = document.getElementById("bonus");
 
 if (user) {
-    // Показываем имя
-    userNameEl.textContent = user.first_name;
+    userNameEl.textContent = `Привет, ${user.first_name}!`;
 
-    // Показываем ID
-    userIdEl.textContent = "ID: " + user.id;
+    // Здесь позже будем получать бонусы с бэкенда
+    // Пока статика
+    // bonusEl.textContent = "💎 Бонусы: 10";
 
     // Отправляем данные на бэкенд
     fetch('http://5.129.203.99:8000/api/user', {
@@ -40,15 +42,25 @@ if (user) {
     .then(response => response.json())
     .then(data => {
         console.log('Пользователь сохранён:', data);
+        // bonusEl.textContent = `💎 Бонусы: ${data.bonus || 0}`;
     })
     .catch(error => {
         console.error('Ошибка при сохранении:', error);
     });
-} else {
-    userNameEl.textContent = "Гость";
-    userIdEl.textContent = "ID: —";
 }
 
-// Готовим интерфейс Telegram
-Telegram.WebApp.ready();
-Telegram.WebApp.expand();
+// QR-код (заглушка)
+// Позже: генерация QR с user.id
+document.getElementById("qr-code").innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220">
+        <rect width="220" height="220" fill="white"/>
+        <rect x="40" y="40" width="20" height="20" fill="black"/>
+        <rect x="80" y="40" width="20" height="20" fill="black"/>
+        <rect x="160" y="40" width="20" height="20" fill="black"/>
+        <rect x="40" y="80" width="20" height="20" fill="black"/>
+        <rect x="160" y="80" width="20" height="20" fill="black"/>
+        <rect x="40" y="160" width="20" height="20" fill="black"/>
+        <rect x="80" y="160" width="20" height="20" fill="black"/>
+        <rect x="160" y="160" width="20" height="20" fill="black"/>
+    </svg>
+`;

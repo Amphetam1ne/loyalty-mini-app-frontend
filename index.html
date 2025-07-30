@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Карта лояльности</title>
+    <title>Карта лояльности | Cafe</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+
     <style>
         * {
             margin: 0;
@@ -14,30 +22,26 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #000;
+            color: white;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            padding: 20px;
-            color: white;
-            overflow: hidden;
+            padding: 20px 16px 80px;
             position: relative;
+            overflow: hidden;
         }
 
+        /* Фон с лёгким свечением */
         body::before {
             content: '';
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: radial-gradient(circle at 30% 30%, rgba(100, 200, 255, 0.05), transparent 50%),
-                        radial-gradient(circle at 70% 70%, rgba(255, 100, 200, 0.05), transparent 50%);
-            opacity: 0;
-            animation: fadeInBackground 1s ease-out 0.2s forwards;
+            background: radial-gradient(circle at 30% 30%, rgba(161, 196, 253, 0.05), transparent 40%),
+                        radial-gradient(circle at 70% 70%, rgba(247, 183, 51, 0.05), transparent 40%);
+            pointer-events: none;
             z-index: 1;
-        }
-
-        @keyframes fadeInBackground {
-            to { opacity: 1; }
         }
 
         .container {
@@ -45,88 +49,72 @@
             z-index: 2;
             width: 100%;
             max-width: 400px;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            padding: 40px 24px 30px;
-            color: white;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .name-container {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 12px;
-        }
-
-        .user-name {
-            font-size: 28px;
-            font-weight: 600;
-            background: linear-gradient(90deg, #a1c4fd, #c2e9fb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
+        /* Логотип */
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 20px 0;
             opacity: 0;
-            transform: translateY(-50px) rotate(-15deg);
-            animation: 
-                fallAndSwing 1.4s ease-out 0.3s forwards,
-                swing 3s ease-in-out 1.4s infinite;
+            transform: scale(0.9);
+            animation: fadeInLogo 0.8s ease-out 0.3s forwards;
         }
 
-        @keyframes fallAndSwing {
-            0% {
-                opacity: 0;
-                transform: translateY(-50px) rotate(-15deg) scale(0.9);
-            }
-            60% {
-                transform: translateY(10px) rotate(8deg) scale(1.05);
-            }
-            80% {
-                transform: translateY(-5px) rotate(-3deg) scale(1.02);
-            }
-            100% {
+        @keyframes fadeInLogo {
+            to {
                 opacity: 1;
-                transform: translateY(0) rotate(-2deg) scale(1);
+                transform: scale(1);
             }
         }
 
-        @keyframes swing {
-            0%, 100% {
-                transform: rotate(-2deg);
-            }
-            50% {
-                transform: rotate(2deg);
-            }
-        }
-
-        .subtitle {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 24px;
-            line-height: 1.5;
+        /* Имя пользователя */
+        .user-name {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 16px 0;
             opacity: 0;
-            animation: fadeInUp 0.6s ease-out 1.2s forwards;
+            transform: translateY(10px);
+            animation: fadeInUp 0.6s ease-out 0.8s forwards;
         }
 
-        .id-box {
-            font-family: 'Courier New', monospace;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            padding: 10px 16px;
-            font-size: 14px;
+        /* Бонусы */
+        .bonus {
+            font-size: 16px;
             color: #a1c4fd;
-            display: inline-block;
-            margin-top: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 12px 0 30px;
+            padding: 8px 16px;
+            background: rgba(161, 196, 253, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(161, 196, 253, 0.2);
             opacity: 0;
-            animation: fadeInUp 0.6s ease-out 1.5s forwards;
+            transform: translateY(10px);
+            animation: fadeInUp 0.6s ease-out 1.1s forwards;
+        }
+
+        /* QR-код в рамке */
+        .qr-container {
+            width: 220px;
+            height: 220px;
+            margin: 20px 0;
+            padding: 16px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.08);
+            opacity: 0;
+            transform: scale(0.95);
+            animation: fadeInUp 0.7s ease-out 1.4s forwards;
+        }
+
+        .qr-code {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 12px;
         }
 
         @keyframes fadeInUp {
@@ -136,35 +124,59 @@
             }
         }
 
-        @media (prefers-color-scheme: light) {
-            body {
-                background: #f5f5f7;
-            }
-            .card {
-                background: rgba(240, 240, 240, 0.7);
-                color: #1c1c1e;
-                border: 1px solid rgba(0, 0, 0, 0.1);
-            }
-            .subtitle, .id-box {
-                color: #8e8e93;
-            }
-            .id-box {
-                background: rgba(0, 0, 0, 0.05);
-            }
+        /* Меню-бар внизу */
+        .menu-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-width: 400px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out 1.8s forwards;
+        }
+
+        .menu-btn {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 24px;
+            transition: 0.2s;
+        }
+
+        .menu-btn.active {
+            color: #a1c4fd;
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="card">
-            <div class="name-container">
-                <div class="title">Привет, <span class="user-name" id="user-name">Гость</span>!</div>
-            </div>
-            <div class="subtitle">
-                Покажите QR-код кассиру для начисления бонусов.
-            </div>
-            <div class="id-box" id="user-id">ID: —</div>
+        <!-- Логотип кафе -->
+        <img src="logo.png" alt="Логотип Cafe" class="logo">
+
+        <!-- Имя пользователя -->
+        <div class="user-name" id="user-name">Привет, Гость!</div>
+
+        <!-- Бонусы -->
+        <div class="bonus" id="bonus">💎 Бонусы: 0</div>
+
+        <!-- QR-код -->
+        <div class="qr-container">
+            <div class="qr-code" id="qr-code">QR</div>
         </div>
+    </div>
+
+    <!-- Меню-бар -->
+    <div class="menu-bar">
+        <div class="menu-btn active">🏠</div>
+        <div class="menu-btn">📜</div>
+        <div class="menu-btn">ℹ️</div>
     </div>
 
     <!-- Telegram SDK -->
