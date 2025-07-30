@@ -5,16 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loyalty App</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            color: #333;
+            color: #ffffff;
+            overflow-x: hidden;
         }
 
         .container {
@@ -31,38 +38,51 @@
             margin: 20px auto;
             border-radius: 50%;
             object-fit: cover;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             animation: pulse 2s infinite;
+            border: 3px solid #4a90e2;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 8px 32px rgba(74, 144, 226, 0.3);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 12px 40px rgba(74, 144, 226, 0.5);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 8px 32px rgba(74, 144, 226, 0.3);
+            }
         }
 
         .greeting {
             font-size: 24px;
             margin: 10px 0;
-            color: #2c3e50;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .points {
             font-size: 28px;
             font-weight: bold;
-            color: #e74c3c;
+            color: #4a90e2;
             margin: 10px 0 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .qr-container {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(145deg, #2a2a3e 0%, #1e1e2e 100%);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             margin: 20px 0;
             position: relative;
             overflow: hidden;
-            border: 2px solid #3498db;
+            border: 2px solid #4a90e2;
+            backdrop-filter: blur(10px);
         }
 
         .qr-container::before {
@@ -74,16 +94,17 @@
             height: 200%;
             background: linear-gradient(
                 to bottom right,
-                rgba(52, 152, 219, 0.1),
-                rgba(52, 152, 219, 0.3)
+                rgba(74, 144, 226, 0.1),
+                rgba(74, 144, 226, 0.2)
             );
             transform: rotate(30deg);
-            animation: shine 3s infinite;
+            animation: shine 4s infinite;
         }
 
         @keyframes shine {
             0% { transform: rotate(30deg) translate(-10%, -10%); }
-            100% { transform: rotate(30deg) translate(10%, 10%); }
+            50% { transform: rotate(30deg) translate(5%, 5%); }
+            100% { transform: rotate(30deg) translate(-10%, -10%); }
         }
 
         .qr-code {
@@ -92,23 +113,27 @@
             margin: 0 auto;
             position: relative;
             z-index: 1;
-            background-color: #fff; /* Заглушка для QR */
+            background-color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            color: #555;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .bottom-menu {
             display: flex;
             justify-content: space-around;
             width: 100%;
-            background: white;
-            padding: 15px 0;
-            border-radius: 15px;
-            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(145deg, #2a2a3e 0%, #1e1e2e 100%);
+            padding: 20px 0;
+            border-radius: 20px;
+            box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.3);
             margin-top: 20px;
+            border: 1px solid #4a90e2;
+            backdrop-filter: blur(10px);
         }
 
         .menu-item {
@@ -116,29 +141,80 @@
             flex-direction: column;
             align-items: center;
             font-size: 14px;
-            color: #7f8c8d;
+            color: #b0b0b0;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 10px;
         }
 
         .menu-item:hover {
-            color: #3498db;
-            transform: translateY(-3px);
+            color: #4a90e2;
+            transform: translateY(-5px);
+            background: rgba(74, 144, 226, 0.1);
         }
 
         .menu-icon {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 5px;
-            background-color: #eee;
+            width: 30px;
+            height: 30px;
+            margin-bottom: 8px;
+            background: linear-gradient(145deg, #4a90e2, #357abd);
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .menu-icon::before {
+            content: "●";
+            color: white;
+            font-size: 16px;
+        }
+
+        /* Дополнительные стили для темной темы */
+        .status-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: #4a90e2;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .greeting {
+                font-size: 20px;
+            }
+            
+            .points {
+                font-size: 24px;
+            }
+            
+            .qr-code {
+                width: 180px;
+                height: 180px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="status-indicator"></div>
     <div class="container">
         <!-- Логотип -->
-        <img src="https://via.placeholder.com/120" alt="Логотип" class="logo" id="logo">
+        <img src="https://via.placeholder.com/120/4a90e2/ffffff?text=LOGO" alt="Логотип" class="logo" id="logo">
 
         <!-- Приветствие -->
         <div class="greeting" id="greeting">Добро пожаловать!</div>
