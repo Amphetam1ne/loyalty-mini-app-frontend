@@ -3,7 +3,11 @@ if (!window.Telegram) {
     window.Telegram = {
         WebApp: {
             initDataUnsafe: {
-                user: { id: 123456789, first_name: "Нико" }
+                user: { 
+                    id: 123456789, 
+                    first_name: "Нико",
+                    username: "niko_user"
+                }
             },
             ready: () => {},
             expand: () => {},
@@ -24,6 +28,7 @@ Telegram.WebApp.setBackgroundColor('#000000');
 // Получаем пользователя
 const user = Telegram.WebApp.initDataUnsafe.user;
 const userNameEl = document.getElementById("greeting");
+const usernameEl = document.getElementById("username");
 const pointsEl = document.getElementById("points");
 
 // Функция для анимации появления элементов
@@ -157,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 150);
             
             // Добавляем эффект пульсации
-            this.style.boxShadow = '0 0 20px rgba(74, 144, 226, 0.5)';
+            this.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3)';
             setTimeout(() => {
                 this.style.boxShadow = 'none';
             }, 300);
@@ -191,6 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Анимация появления элементов с задержкой
     const elements = [
         document.getElementById('logo'),
+        document.getElementById('username'),
         document.getElementById('greeting'),
         document.getElementById('points'),
         document.getElementById('qr-code'),
@@ -234,6 +240,13 @@ function showLoyaltyInfo() {
 // Обработка данных пользователя
 if (user) {
     userNameEl.textContent = `Привет, ${user.first_name}!`;
+    
+    // Отображаем никнейм пользователя
+    if (user.username) {
+        usernameEl.textContent = `@${user.username}`;
+    } else {
+        usernameEl.textContent = `@user_${user.id}`;
+    }
 
     // Отправляем данные на бэкенд
     fetch('http://5.129.203.99:8000/api/user', {
@@ -260,6 +273,7 @@ if (user) {
 } else {
     // Значения по умолчанию если нет пользователя
     userNameEl.textContent = 'Привет, пользователь!';
+    usernameEl.textContent = '@guest_user';
     updatePoints(150);
 }
 
