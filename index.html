@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: #000000;
             margin: 0;
             padding: 0;
             display: flex;
@@ -38,23 +38,25 @@
             margin: 20px auto;
             border-radius: 50%;
             object-fit: cover;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            animation: pulse 2s infinite;
+            box-shadow: 0 8px 32px rgba(74, 144, 226, 0.3);
+            animation: logoFloat 3s ease-in-out infinite;
             border: 3px solid #4a90e2;
+            transition: all 0.3s ease;
         }
 
-        @keyframes pulse {
-            0% { 
-                transform: scale(1);
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(74, 144, 226, 0.5);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { 
+                transform: translateY(0px);
                 box-shadow: 0 8px 32px rgba(74, 144, 226, 0.3);
             }
             50% { 
-                transform: scale(1.05);
+                transform: translateY(-10px);
                 box-shadow: 0 12px 40px rgba(74, 144, 226, 0.5);
-            }
-            100% { 
-                transform: scale(1);
-                box-shadow: 0 8px 32px rgba(74, 144, 226, 0.3);
             }
         }
 
@@ -62,7 +64,19 @@
             font-size: 24px;
             margin: 10px 0;
             color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .points {
@@ -70,19 +84,21 @@
             font-weight: bold;
             color: #4a90e2;
             margin: 10px 0 20px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
         }
 
         .qr-container {
-            background: linear-gradient(145deg, #2a2a3e 0%, #1e1e2e 100%);
+            background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%);
             padding: 25px;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
             margin: 20px 0;
             position: relative;
             overflow: hidden;
             border: 2px solid #4a90e2;
             backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
         }
 
         .qr-container::before {
@@ -120,20 +136,22 @@
             font-size: 14px;
             color: #333;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .qr-code:active {
+            transform: scale(0.95);
         }
 
         .bottom-menu {
             display: flex;
             justify-content: space-around;
             width: 100%;
-            background: linear-gradient(145deg, #2a2a3e 0%, #1e1e2e 100%);
+            background: transparent;
             padding: 20px 0;
-            border-radius: 20px;
-            box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.3);
             margin-top: 20px;
-            border: 1px solid #4a90e2;
-            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
         }
 
         .menu-item {
@@ -144,19 +162,39 @@
             color: #b0b0b0;
             cursor: pointer;
             transition: all 0.3s ease;
-            padding: 10px;
-            border-radius: 10px;
+            padding: 15px 10px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(74, 144, 226, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .menu-item:hover::before {
+            left: 100%;
         }
 
         .menu-item:hover {
             color: #4a90e2;
             transform: translateY(-5px);
-            background: rgba(74, 144, 226, 0.1);
+        }
+
+        .menu-item:active {
+            transform: scale(0.95);
         }
 
         .menu-icon {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             margin-bottom: 8px;
             background: linear-gradient(145deg, #4a90e2, #357abd);
             border-radius: 50%;
@@ -164,12 +202,18 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+            transition: all 0.3s ease;
         }
 
         .menu-icon::before {
             content: "●";
             color: white;
-            font-size: 16px;
+            font-size: 18px;
+        }
+
+        .menu-item:hover .menu-icon {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.5);
         }
 
         /* Дополнительные стили для темной темы */
@@ -189,7 +233,7 @@
             51%, 100% { opacity: 0.3; }
         }
 
-        /* Адаптивность */
+        /* Анимации для мобильных устройств */
         @media (max-width: 480px) {
             .container {
                 padding: 15px;
@@ -207,6 +251,75 @@
                 width: 180px;
                 height: 180px;
             }
+
+            .menu-item {
+                padding: 12px 8px;
+            }
+
+            .menu-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            /* Оптимизация анимаций для мобильных */
+            .logo {
+                animation: logoFloatMobile 2.5s ease-in-out infinite;
+            }
+
+            @keyframes logoFloatMobile {
+                0%, 100% { 
+                    transform: translateY(0px);
+                }
+                50% { 
+                    transform: translateY(-8px);
+                }
+            }
+
+            /* Уменьшаем интенсивность анимаций для экономии батареи */
+            .qr-container::before {
+                animation: shine 6s infinite;
+            }
+        }
+
+        /* Анимации для устройств с поддержкой hover */
+        @media (hover: hover) {
+            .menu-item:hover {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Анимации для устройств без поддержки hover (мобильные) */
+        @media (hover: none) {
+            .menu-item:active {
+                transform: scale(0.95);
+                color: #4a90e2;
+            }
+        }
+
+        /* Плавное появление элементов */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Анимация для точек */
+        .points-animation {
+            animation: pointsGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes pointsGlow {
+            0%, 100% {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            50% {
+                text-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+            }
         }
     </style>
 </head>
@@ -214,7 +327,7 @@
     <div class="status-indicator"></div>
     <div class="container">
         <!-- Логотип -->
-        <img src="https://via.placeholder.com/120/4a90e2/ffffff?text=LOGO" alt="Логотип" class="logo" id="logo">
+        <img src="logo.png" alt="Логотип" class="logo" id="logo">
 
         <!-- Приветствие -->
         <div class="greeting" id="greeting">Добро пожаловать!</div>
@@ -263,6 +376,15 @@
             // Заглушка QR (замени на реальный генератор)
             const qrData = "user_id:12345"; // Пример данных для QR
             console.log(`QR данные: ${qrData}`);
+
+            // Добавляем анимацию для точек
+            const pointsElement = document.getElementById('points');
+            setInterval(() => {
+                pointsElement.classList.add('points-animation');
+                setTimeout(() => {
+                    pointsElement.classList.remove('points-animation');
+                }, 2000);
+            }, 4000);
         });
     </script>
 </body>

@@ -18,8 +18,8 @@ Telegram.WebApp.ready();
 Telegram.WebApp.expand();
 
 // Устанавливаем цвета для темной темы
-Telegram.WebApp.setHeaderColor('#1a1a2e');
-Telegram.WebApp.setBackgroundColor('#0f3460');
+Telegram.WebApp.setHeaderColor('#000000');
+Telegram.WebApp.setBackgroundColor('#000000');
 
 // Получаем пользователя
 const user = Telegram.WebApp.initDataUnsafe.user;
@@ -28,9 +28,11 @@ const pointsEl = document.getElementById("points");
 
 // Функция для анимации появления элементов
 function animateElement(element, delay = 0) {
+    if (!element) return;
+    
     element.style.opacity = '0';
-    element.style.transform = 'translateY(20px)';
-    element.style.transition = 'all 0.6s ease';
+    element.style.transform = 'translateY(30px)';
+    element.style.transition = 'all 0.8s ease-out';
     
     setTimeout(() => {
         element.style.opacity = '1';
@@ -43,12 +45,14 @@ function updatePoints(newPoints) {
     const currentPoints = parseInt(pointsEl.textContent.match(/\d+/)[0]);
     const difference = newPoints - currentPoints;
     
-    if (difference > 0) {
-        pointsEl.style.color = '#4CAF50';
-        setTimeout(() => {
-            pointsEl.style.color = '#4a90e2';
-        }, 1000);
-    }
+    // Анимация изменения баллов
+    pointsEl.style.transform = 'scale(1.1)';
+    pointsEl.style.color = difference > 0 ? '#4CAF50' : '#ff6b6b';
+    
+    setTimeout(() => {
+        pointsEl.style.transform = 'scale(1)';
+        pointsEl.style.color = '#4a90e2';
+    }, 300);
     
     pointsEl.textContent = `${newPoints} баллов`;
 }
@@ -138,24 +142,52 @@ function generateQRCode(data) {
     `;
 }
 
-// Обработчики для меню
+// Функция для создания тактильной обратной связи (для мобильных)
+function createHapticFeedback() {
+    if ('vibrate' in navigator) {
+        navigator.vibrate(50);
+    }
+}
+
+// Обработчики для меню с улучшенной анимацией
 document.addEventListener('DOMContentLoaded', function() {
     const menuItems = document.querySelectorAll('.menu-item');
     
     menuItems.forEach((item, index) => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
             const menuText = this.querySelector('span').textContent;
             console.log(`Нажата кнопка: ${menuText}`);
+            
+            // Создаем тактильную обратную связь
+            createHapticFeedback();
             
             // Анимация нажатия
             this.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 this.style.transform = 'translateY(-5px)';
             }, 150);
+            
+            // Добавляем эффект пульсации
+            this.style.boxShadow = '0 0 20px rgba(74, 144, 226, 0.5)';
+            setTimeout(() => {
+                this.style.boxShadow = 'none';
+            }, 300);
         });
+        
+        // Добавляем анимацию при наведении (только для десктопа)
+        if (window.matchMedia('(hover: hover)').matches) {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        }
     });
     
-    // Анимация появления элементов
+    // Анимация появления элементов с задержкой
     const elements = [
         document.getElementById('logo'),
         document.getElementById('greeting'),
@@ -169,8 +201,17 @@ document.addEventListener('DOMContentLoaded', function() {
             animateElement(element, index * 200);
         }
     });
+    
+    // Добавляем анимацию для логотипа при загрузке
+    const logo = document.getElementById('logo');
+    if (logo) {
+        logo.addEventListener('load', function() {
+            this.style.animation = 'logoFloat 3s ease-in-out infinite';
+        });
+    }
 });
 
+// Обработка данных пользователя
 if (user) {
     userNameEl.textContent = `Привет, ${user.first_name}!`;
 
@@ -207,6 +248,7 @@ generateQRCode(`user_id:${user ? user.id : '12345'}`);
 
 // Добавляем интерактивность для QR кода
 document.getElementById("qr-code").addEventListener('click', function() {
+    createHapticFeedback();
     this.style.transform = 'scale(0.95)';
     setTimeout(() => {
         this.style.transform = 'scale(1)';
@@ -215,3 +257,55 @@ document.getElementById("qr-code").addEventListener('click', function() {
     // Здесь можно добавить функциональность копирования или сканирования
     console.log('QR код нажат');
 });
+
+// Добавляем анимацию для точек каждые 4 секунды
+setInterval(() => {
+    const pointsElement = document.getElementById('points');
+    if (pointsElement) {
+        pointsElement.classList.add('points-animation');
+        setTimeout(() => {
+            pointsElement.classList.remove('points-animation');
+        }, 2000);
+    }
+}, 4000);
+
+// Оптимизация для мобильных устройств
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+            .then(function(registration) {
+                console.log('SW registered: ', registration);
+            })
+            .catch(function(registrationError) {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
+
+// Добавляем поддержку жестов для мобильных устройств
+let touchStartY = 0;
+let touchEndY = 0;
+
+document.addEventListener('touchstart', function(e) {
+    touchStartY = e.changedTouches[0].screenY;
+});
+
+document.addEventListener('touchend', function(e) {
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+});
+
+function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchStartY - touchEndY;
+    
+    if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+            // Свайп вверх
+            console.log('Свайп вверх');
+        } else {
+            // Свайп вниз
+            console.log('Свайп вниз');
+        }
+    }
+}
