@@ -1,11 +1,10 @@
+// Telegram WebApp готов
 Telegram.WebApp.ready();
 Telegram.WebApp.expand();
 Telegram.WebApp.setHeaderColor('#000');
 Telegram.WebApp.setBackgroundColor('#000');
 
-// Получаем данные пользователя из Telegram WebApp
-const user = Telegram.WebApp.initDataUnsafe?.user || Telegram.WebApp.initData?.user;
-
+// Получаем элементы
 const usernameEl = document.getElementById("username");
 const pointsEl = document.getElementById("points");
 
@@ -102,25 +101,33 @@ function createHapticFeedback() {
     if ('vibrate' in navigator) navigator.vibrate(40);
 }
 
+// После полной загрузки страницы
 document.addEventListener('DOMContentLoaded', function() {
-    // Показываем first_name, если есть, иначе username
+    // Получаем пользователя из Telegram
+    const user = window.Telegram?.WebApp?.initDataUnsafe?.user || null;
+
+    // Показываем имя или username
     if (user) {
         if (user.first_name) {
-            usernameEl.textContent = user.first_name;  // Показываем имя: Niko
+            usernameEl.textContent = user.first_name;
         } else if (user.username) {
-            usernameEl.textContent = `@${user.username}`;   // Если имени нет — юзернейм: @Nikoniko94
+            usernameEl.textContent = user.username;
         } else {
             usernameEl.textContent = `user_${user.id}`;
         }
     } else {
         usernameEl.textContent = 'Гость';
     }
+
     // Баллы
     updatePoints(150);
-    // QR
+
+    // QR-код с ID пользователя
     generateQRCode(`user_id:${user ? user.id : 'guest'}`);
+
     // Анимация появления
-    [document.getElementById('logo'), usernameEl, pointsEl, document.getElementById('qr-code')].forEach((el, i) => animateElement(el, i*120));
+    [document.getElementById('logo'), usernameEl, pointsEl, document.getElementById('qr-code')].forEach((el, i) => animateElement(el, i * 120));
+
     // Кнопки меню
     document.getElementById('history-btn').onclick = function() {
         createHapticFeedback();
@@ -134,7 +141,8 @@ document.addEventListener('DOMContentLoaded', function() {
         createHapticFeedback();
         alert('Информация о системе лояльности будет доступна в следующем обновлении');
     };
-    // QR tap
+
+    // Анимация при клике на QR
     document.getElementById('qr-code').addEventListener('click', function() {
         createHapticFeedback();
         this.style.transform = 'scale(0.96)';
