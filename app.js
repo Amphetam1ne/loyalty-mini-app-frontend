@@ -120,13 +120,17 @@ function createHapticFeedback() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Никнейм
-    if (user && user.username) {
-        usernameEl.textContent = `@${user.username}`;
-    } else if (user) {
-        usernameEl.textContent = `@user_${user.id}`;
+    // Показываем first_name, если есть, иначе username
+    if (user) {
+        if (user.first_name) {
+            usernameEl.textContent = user.first_name;  // Показываем имя: Niko
+        } else if (user.username) {
+            usernameEl.textContent = user.username;   // Если имени нет — юзернейм: Nikoniko94
+        } else {
+            usernameEl.textContent = `user_${user.id}`;
+        }
     } else {
-        usernameEl.textContent = '@guest';
+        usernameEl.textContent = 'Гость';
     }
     // Баллы
     updatePoints(150);
