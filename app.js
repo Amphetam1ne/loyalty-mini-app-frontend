@@ -1,8 +1,12 @@
 // Инициализация Telegram WebApp
-Telegram.WebApp.ready();
-Telegram.WebApp.expand();
-Telegram.WebApp.setHeaderColor('#000');
-Telegram.WebApp.setBackgroundColor('#000');
+if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+    Telegram.WebApp.setHeaderColor('#000');
+    Telegram.WebApp.setBackgroundColor('#000');
+} else {
+    console.warn('Telegram WebApp не доступен');
+}
 
 // Получаем элементы DOM
 const usernameEl = document.getElementById("username");
@@ -41,9 +45,34 @@ function createHapticFeedback() {
     if ('vibrate' in navigator) navigator.vibrate(40);
 }
 
+// Получение данных пользователя из Telegram WebApp
+function getUserData() {
+    // Проверяем доступность Telegram WebApp
+    if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
+        console.warn('Telegram WebApp недоступен');
+        return null;
+    }
+    
+    // Попробуем несколько способов получения данных пользователя
+    const user = 
+        Telegram.WebApp.initDataUnsafe?.user ||
+        Telegram.WebApp.initData?.user ||
+        null;
+    
+    console.log('Telegram WebApp data:', {
+        initDataUnsafe: Telegram.WebApp.initDataUnsafe,
+        initData: Telegram.WebApp.initData,
+        user: user
+    });
+    
+    return user;
+}
+
 // Получение имени пользователя
 function getUserDisplayName(user) {
     if (!user) return 'Гость';
+    
+    console.log('User data:', user);
     
     if (user.first_name) {
         return user.first_name;
@@ -54,18 +83,28 @@ function getUserDisplayName(user) {
     }
 }
 
+// Обновление имени пользователя
+function updateUsername() {
+    const user = getUserData();
+    const displayName = getUserDisplayName(user);
+    console.log('Display name:', displayName);
+    usernameEl.textContent = displayName;
+}
+
 // Инициализация приложения
 document.addEventListener('DOMContentLoaded', function() {
-    // Получаем данные пользователя из Telegram
-    const user = window.Telegram?.WebApp?.initDataUnsafe?.user || null;
+    console.log('DOM загружен');
+    console.log('Telegram доступен:', typeof Telegram !== 'undefined');
+    console.log('Telegram.WebApp доступен:', typeof Telegram !== 'undefined' && Telegram.WebApp);
     
-    // Устанавливаем имя пользователя
-    usernameEl.textContent = getUserDisplayName(user);
+    // Обновляем имя пользователя
+    updateUsername();
     
     // Устанавливаем баллы
     updatePoints(150);
     
     // Генерируем QR-код
+    const user = getUserData();
     const userId = user ? user.id : 'guest';
     generateQRCode(`user_id:${userId}`);
     
@@ -95,4 +134,9 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.transform = 'scale(1)'; 
         }, 120);
     });
+    
+    // Попробуем обновить имя пользователя через небольшую задержку
+    setTimeout(updateUsername, 1000);
+    setTimeout(updateUsername, 2000);
+    setTimeout(updateUsername, 3000);
 });
