@@ -1,13 +1,16 @@
-// Telegram WebApp готов
+// Инициализация Telegram WebApp
 Telegram.WebApp.ready();
 Telegram.WebApp.expand();
 Telegram.WebApp.setHeaderColor('#000');
 Telegram.WebApp.setBackgroundColor('#000');
 
-// Получаем элементы
+// Получаем элементы DOM
 const usernameEl = document.getElementById("username");
 const pointsEl = document.getElementById("points");
+const logoEl = document.getElementById("logo");
+const qrCodeEl = document.getElementById("qr-code");
 
+// Анимация появления элемента
 function animateElement(element, delay = 0) {
     if (!element) return;
     element.style.opacity = '0';
@@ -19,133 +22,77 @@ function animateElement(element, delay = 0) {
     }, delay);
 }
 
-function updatePoints(newPoints) {
-    pointsEl.textContent = `${newPoints} баллов`;
+// Обновление баллов
+function updatePoints(points) {
+    pointsEl.textContent = `${points} баллов`;
 }
 
+// Создание QR-кода (заглушка)
 function generateQRCode(data) {
-    const qrContainer = document.getElementById("qr-code");
-    qrContainer.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 200 200">
-            <rect width="200" height="200" fill="#fff"/>
-            <rect x="20" y="20" width="8" height="8" fill="#000"/>
-            <rect x="40" y="20" width="8" height="8" fill="#000"/>
-            <rect x="60" y="20" width="8" height="8" fill="#000"/>
-            <rect x="80" y="20" width="8" height="8" fill="#000"/>
-            <rect x="100" y="20" width="8" height="8" fill="#000"/>
-            <rect x="120" y="20" width="8" height="8" fill="#000"/>
-            <rect x="140" y="20" width="8" height="8" fill="#000"/>
-            <rect x="160" y="20" width="8" height="8" fill="#000"/>
-            <rect x="180" y="20" width="8" height="8" fill="#000"/>
-            <rect x="20" y="40" width="8" height="8" fill="#000"/>
-            <rect x="60" y="40" width="8" height="8" fill="#000"/>
-            <rect x="100" y="40" width="8" height="8" fill="#000"/>
-            <rect x="140" y="40" width="8" height="8" fill="#000"/>
-            <rect x="180" y="40" width="8" height="8" fill="#000"/>
-            <rect x="20" y="60" width="8" height="8" fill="#000"/>
-            <rect x="40" y="60" width="8" height="8" fill="#000"/>
-            <rect x="60" y="60" width="8" height="8" fill="#000"/>
-            <rect x="80" y="60" width="8" height="8" fill="#000"/>
-            <rect x="100" y="60" width="8" height="8" fill="#000"/>
-            <rect x="120" y="60" width="8" height="8" fill="#000"/>
-            <rect x="140" y="60" width="8" height="8" fill="#000"/>
-            <rect x="160" y="60" width="8" height="8" fill="#000"/>
-            <rect x="180" y="60" width="8" height="8" fill="#000"/>
-            <rect x="20" y="80" width="8" height="8" fill="#000"/>
-            <rect x="60" y="80" width="8" height="8" fill="#000"/>
-            <rect x="100" y="80" width="8" height="8" fill="#000"/>
-            <rect x="140" y="80" width="8" height="8" fill="#000"/>
-            <rect x="180" y="80" width="8" height="8" fill="#000"/>
-            <rect x="20" y="100" width="8" height="8" fill="#000"/>
-            <rect x="40" y="100" width="8" height="8" fill="#000"/>
-            <rect x="60" y="100" width="8" height="8" fill="#000"/>
-            <rect x="80" y="100" width="8" height="8" fill="#000"/>
-            <rect x="100" y="100" width="8" height="8" fill="#000"/>
-            <rect x="120" y="100" width="8" height="8" fill="#000"/>
-            <rect x="140" y="100" width="8" height="8" fill="#000"/>
-            <rect x="160" y="100" width="8" height="8" fill="#000"/>
-            <rect x="180" y="100" width="8" height="8" fill="#000"/>
-            <rect x="20" y="120" width="8" height="8" fill="#000"/>
-            <rect x="60" y="120" width="8" height="8" fill="#000"/>
-            <rect x="100" y="120" width="8" height="8" fill="#000"/>
-            <rect x="140" y="120" width="8" height="8" fill="#000"/>
-            <rect x="180" y="120" width="8" height="8" fill="#000"/>
-            <rect x="20" y="140" width="8" height="8" fill="#000"/>
-            <rect x="40" y="140" width="8" height="8" fill="#000"/>
-            <rect x="60" y="140" width="8" height="8" fill="#000"/>
-            <rect x="80" y="140" width="8" height="8" fill="#000"/>
-            <rect x="100" y="140" width="8" height="8" fill="#000"/>
-            <rect x="120" y="140" width="8" height="8" fill="#000"/>
-            <rect x="140" y="140" width="8" height="8" fill="#000"/>
-            <rect x="160" y="140" width="8" height="8" fill="#000"/>
-            <rect x="180" y="140" width="8" height="8" fill="#000"/>
-            <rect x="20" y="160" width="8" height="8" fill="#000"/>
-            <rect x="60" y="160" width="8" height="8" fill="#000"/>
-            <rect x="100" y="160" width="8" height="8" fill="#000"/>
-            <rect x="140" y="160" width="8" height="8" fill="#000"/>
-            <rect x="180" y="160" width="8" height="8" fill="#000"/>
-            <rect x="20" y="180" width="8" height="8" fill="#000"/>
-            <rect x="40" y="180" width="8" height="8" fill="#000"/>
-            <rect x="60" y="180" width="8" height="8" fill="#000"/>
-            <rect x="80" y="180" width="8" height="8" fill="#000"/>
-            <rect x="100" y="180" width="8" height="8" fill="#000"/>
-            <rect x="120" y="180" width="8" height="8" fill="#000"/>
-            <rect x="140" y="180" width="8" height="8" fill="#000"/>
-            <rect x="160" y="180" width="8" height="8" fill="#000"/>
-            <rect x="180" y="180" width="8" height="8" fill="#000"/>
-        </svg>
+    qrCodeEl.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #333; font-size: 14px;">
+            QR-код<br>${data}
+        </div>
     `;
 }
 
+// Тактильная обратная связь
 function createHapticFeedback() {
     if ('vibrate' in navigator) navigator.vibrate(40);
 }
 
-// После полной загрузки страницы
-document.addEventListener('DOMContentLoaded', function() {
-    // Получаем пользователя из Telegram
-    const user = window.Telegram?.WebApp?.initDataUnsafe?.user || null;
-
-    // Показываем имя или username
-    if (user) {
-        if (user.first_name) {
-            usernameEl.textContent = user.first_name;
-        } else if (user.username) {
-            usernameEl.textContent = user.username;
-        } else {
-            usernameEl.textContent = `user_${user.id}`;
-        }
+// Получение имени пользователя
+function getUserDisplayName(user) {
+    if (!user) return 'Гость';
+    
+    if (user.first_name) {
+        return user.first_name;
+    } else if (user.username) {
+        return `@${user.username}`;
     } else {
-        usernameEl.textContent = 'Гость';
+        return `user_${user.id}`;
     }
+}
 
-    // Баллы
+// Инициализация приложения
+document.addEventListener('DOMContentLoaded', function() {
+    // Получаем данные пользователя из Telegram
+    const user = window.Telegram?.WebApp?.initDataUnsafe?.user || null;
+    
+    // Устанавливаем имя пользователя
+    usernameEl.textContent = getUserDisplayName(user);
+    
+    // Устанавливаем баллы
     updatePoints(150);
-
-    // QR-код с ID пользователя
-    generateQRCode(`user_id:${user ? user.id : 'guest'}`);
-
-    // Анимация появления
-    [document.getElementById('logo'), usernameEl, pointsEl, document.getElementById('qr-code')].forEach((el, i) => animateElement(el, i * 120));
-
-    // Кнопки меню
-    document.getElementById('history-btn').onclick = function() {
-        createHapticFeedback();
-        alert('История покупок будет доступна в следующем обновлении');
+    
+    // Генерируем QR-код
+    const userId = user ? user.id : 'guest';
+    generateQRCode(`user_id:${userId}`);
+    
+    // Анимация появления элементов
+    const elements = [logoEl, usernameEl, pointsEl, qrCodeEl];
+    elements.forEach((el, i) => animateElement(el, i * 120));
+    
+    // Обработчики кнопок
+    const buttons = {
+        'history-btn': 'История покупок будет доступна в следующем обновлении',
+        'cafe-btn': 'Информация о кафе будет доступна в следующем обновлении',
+        'loyalty-btn': 'Информация о системе лояльности будет доступна в следующем обновлении'
     };
-    document.getElementById('cafe-btn').onclick = function() {
-        createHapticFeedback();
-        alert('Информация о кафе будет доступна в следующем обновлении');
-    };
-    document.getElementById('loyalty-btn').onclick = function() {
-        createHapticFeedback();
-        alert('Информация о системе лояльности будет доступна в следующем обновлении');
-    };
-
-    // Анимация при клике на QR
-    document.getElementById('qr-code').addEventListener('click', function() {
+    
+    Object.entries(buttons).forEach(([id, message]) => {
+        document.getElementById(id).onclick = function() {
+            createHapticFeedback();
+            alert(message);
+        };
+    });
+    
+    // Анимация при клике на QR-код
+    qrCodeEl.addEventListener('click', function() {
         createHapticFeedback();
         this.style.transform = 'scale(0.96)';
-        setTimeout(() => { this.style.transform = 'scale(1)'; }, 120);
+        setTimeout(() => { 
+            this.style.transform = 'scale(1)'; 
+        }, 120);
     });
 });
