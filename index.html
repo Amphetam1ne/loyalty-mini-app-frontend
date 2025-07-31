@@ -2,372 +2,153 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Loyalty App</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        html, body {
+            height: 100%;
+            background: #000;
         }
-
         body {
             font-family: 'Arial', sans-serif;
-            background: #000000;
+            background: #000;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+            color: #fff;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            color: #ffffff;
-            overflow-x: hidden;
+            justify-content: flex-start;
         }
-
         .container {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
+            width: 100vw;
+            max-width: 480px;
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 0 0 16px 0;
             box-sizing: border-box;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-
         .logo {
-            width: 120px;
-            height: 120px;
-            margin: 20px auto;
+            width: 96px;
+            height: 96px;
+            margin: 32px auto 12px auto;
             border-radius: 50%;
             object-fit: cover;
-            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
-            animation: logoFloat 3s ease-in-out infinite;
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 24px rgba(255,255,255,0.12);
+            animation: logoFloatMobile 2.2s ease-in-out infinite;
+            display: block;
         }
-
-        .logo:hover {
-            transform: scale(1.05);
-            box-shadow: 0 12px 40px rgba(255, 255, 255, 0.3);
+        @keyframes logoFloatMobile {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-
-        @keyframes logoFloat {
-            0%, 100% { 
-                transform: translateY(0px);
-                box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
-            }
-            50% { 
-                transform: translateY(-10px);
-                box-shadow: 0 12px 40px rgba(255, 255, 255, 0.3);
-            }
-        }
-
         .username {
-            font-size: 18px;
-            margin: 10px 0;
-            color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            animation: fadeInUp 0.8s ease-out 0.1s both;
-            font-weight: 300;
-            letter-spacing: 0.5px;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 18px;
+            letter-spacing: 0.2px;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            animation: fadeInUp 0.7s cubic-bezier(.4,1.4,.6,1) 0.1s both;
         }
-
-        .greeting {
-            font-size: 24px;
-            margin: 10px 0;
-            color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .points {
-            font-size: 28px;
-            font-weight: bold;
-            color: #ffffff;
-            margin: 10px 0 20px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            animation: fadeInUp 0.8s ease-out 0.3s both;
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: center;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.22);
+            animation: fadeInUp 0.7s cubic-bezier(.4,1.4,.6,1) 0.2s both;
         }
-
         .qr-container {
-            background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%);
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.8),
-                0 0 0 1px rgba(255, 255, 255, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            margin: 20px 0;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid #ffffff;
-            backdrop-filter: blur(10px);
-            animation: fadeInUp 0.8s ease-out 0.4s both;
+            background: #111;
+            padding: 18px;
+            border-radius: 22px;
+            box-shadow: 0 6px 32px rgba(0,0,0,0.45);
+            border: 2.5px solid #fff;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInUp 0.7s cubic-bezier(.4,1.4,.6,1) 0.3s both;
         }
-
-        .qr-container::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                rgba(255, 255, 255, 0.03),
-                rgba(255, 255, 255, 0.05)
-            );
-            transform: rotate(30deg);
-            animation: shine 6s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: rotate(30deg) translate(-10%, -10%); }
-            50% { transform: rotate(30deg) translate(5%, 5%); }
-            100% { transform: rotate(30deg) translate(-10%, -10%); }
-        }
-
         .qr-code {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-            background-color: #ffffff;
+            width: 180px;
+            height: 180px;
+            background: #fff;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 14px;
             color: #333;
-            border-radius: 15px;
-            box-shadow: 
-                0 8px 25px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
         }
-
-        .qr-code:active {
-            transform: scale(0.95);
-        }
-
         .bottom-menu {
-            display: flex;
-            justify-content: space-around;
             width: 100%;
-            background: transparent;
-            padding: 25px 0;
-            margin-top: 30px;
-            animation: fadeInUp 0.8s ease-out 0.6s both;
-        }
-
-        .menu-item {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 14px;
-            color: #b0b0b0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 20px 15px;
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            min-width: 100px;
+            justify-content: space-between;
+            gap: 8px;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.98);
+            padding: 0 0 12px 0;
+            z-index: 10;
         }
-
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
+        .menu-btn {
+            flex: 1 1 0;
+            margin: 0 8px;
+            background: #fff;
+            color: #111;
+            font-size: 1.08rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 16px;
+            padding: 18px 0 16px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            transition: background 0.18s, color 0.18s, transform 0.18s;
+            outline: none;
+            letter-spacing: 0.2px;
+            text-align: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-
-        .menu-item:hover::before {
-            left: 100%;
+        .menu-btn:active {
+            background: #eaeaea;
+            color: #000;
+            transform: scale(0.97);
         }
-
-        .menu-item:hover {
-            color: #ffffff;
-            transform: translateY(-5px);
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .menu-item:active {
-            transform: scale(0.95);
-        }
-
-        .menu-icon {
-            width: 45px;
-            height: 45px;
-            margin-bottom: 10px;
-            background: linear-gradient(145deg, #ffffff, #e0e0e0);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 
-                0 6px 20px rgba(255, 255, 255, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .menu-icon::before {
-            content: "●";
-            color: #333;
-            font-size: 20px;
-        }
-
-        .menu-item:hover .menu-icon {
-            transform: scale(1.1);
-            box-shadow: 
-                0 8px 25px rgba(255, 255, 255, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
-        }
-
-        /* Анимации для мобильных устройств */
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .greeting {
-                font-size: 20px;
-            }
-            
-            .username {
-                font-size: 16px;
-            }
-            
-            .points {
-                font-size: 24px;
-            }
-            
-            .qr-code {
-                width: 180px;
-                height: 180px;
-            }
-
-            .menu-item {
-                padding: 15px 10px;
-                min-width: 80px;
-            }
-
-            .menu-icon {
-                width: 40px;
-                height: 40px;
-            }
-
-            /* Оптимизация анимаций для мобильных */
-            .logo {
-                animation: logoFloatMobile 2.5s ease-in-out infinite;
-            }
-
-            @keyframes logoFloatMobile {
-                0%, 100% { 
-                    transform: translateY(0px);
-                }
-                50% { 
-                    transform: translateY(-8px);
-                }
-            }
-
-            /* Уменьшаем интенсивность анимаций для экономии батареи */
-            .qr-container::before {
-                animation: shine 8s infinite;
-            }
-        }
-
-        /* Анимации для устройств с поддержкой hover */
-        @media (hover: hover) {
-            .menu-item:hover {
-                transform: translateY(-8px);
-            }
-        }
-
-        /* Анимации для устройств без поддержки hover (мобильные) */
-        @media (hover: none) {
-            .menu-item:active {
-                transform: scale(0.95);
-                color: #ffffff;
-            }
-        }
-
-        /* Плавное появление элементов */
-        .fade-in {
-            opacity: 0;
-            animation: fadeIn 0.6s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+        @media (min-width: 481px) {
+            .container { max-width: 420px; }
+            .bottom-menu { max-width: 420px; margin: 0 auto; left: 50%; transform: translateX(-50%); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Логотип -->
         <img src="logo.png" alt="Логотип" class="logo" id="logo">
-
-        <!-- Никнейм пользователя -->
         <div class="username" id="username">@username</div>
-
-        <!-- Приветствие -->
-        <div class="greeting" id="greeting">Добро пожаловать!</div>
-
-        <!-- Баллы -->
         <div class="points" id="points">0 баллов</div>
-
-        <!-- QR-код -->
         <div class="qr-container">
-            <div class="qr-code" id="qr-code">
-                Здесь будет ваш QR-код
-            </div>
-        </div>
-
-        <!-- Нижнее меню -->
-        <div class="bottom-menu">
-            <div class="menu-item">
-                <div class="menu-icon"></div>
-                <span>История покупок</span>
-            </div>
-            <div class="menu-item">
-                <div class="menu-icon"></div>
-                <span>Информация о кафе</span>
-            </div>
-            <div class="menu-item">
-                <div class="menu-icon"></div>
-                <span>Система лояльности</span>
-            </div>
+            <div class="qr-code" id="qr-code">QR</div>
         </div>
     </div>
-
-    <script>
-        // Здесь будет логика для работы с данными
-        document.addEventListener('DOMContentLoaded', function() {
-            // Пример динамического обновления данных
-            const userName = "Иван"; // Замени на данные из API
-            const userPoints = 150;   // Замени на данные из API
-            
-            document.getElementById('greeting').textContent = `Привет, ${userName}!`;
-            document.getElementById('points').textContent = `${userPoints} баллов`;
-            
-            // Заглушка QR (замени на реальный генератор)
-            const qrData = "user_id:12345"; // Пример данных для QR
-            console.log(`QR данные: ${qrData}`);
-        });
-    </script>
+    <div class="bottom-menu">
+        <button class="menu-btn" id="history-btn">История покупок</button>
+        <button class="menu-btn" id="cafe-btn">О кафе</button>
+        <button class="menu-btn" id="loyalty-btn">Система лояльности</button>
+    </div>
+    <script src="app.js"></script>
 </body>
 </html>
