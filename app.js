@@ -1,28 +1,9 @@
-// Mobile-first, только для мобильных, без приветствия
-if (!window.Telegram) {
-    window.Telegram = {
-        WebApp: {
-            initDataUnsafe: {
-                user: {
-                    id: 123456789,
-                    first_name: "Нико",
-                    username: "niko_user"
-                }
-            },
-            ready: () => {},
-            expand: () => {},
-            setHeaderColor: (color) => {},
-            setBackgroundColor: (color) => {}
-        }
-    };
-}
-
 Telegram.WebApp.ready();
 Telegram.WebApp.expand();
 Telegram.WebApp.setHeaderColor('#000');
 Telegram.WebApp.setBackgroundColor('#000');
 
-const user = Telegram.WebApp.initDataUnsafe.user;
+const user = window.Telegram?.WebApp?.initDataUnsafe?.user || null;
 const usernameEl = document.getElementById("username");
 const pointsEl = document.getElementById("points");
 
