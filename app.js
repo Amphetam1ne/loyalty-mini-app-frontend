@@ -3,7 +3,9 @@ Telegram.WebApp.expand();
 Telegram.WebApp.setHeaderColor('#000');
 Telegram.WebApp.setBackgroundColor('#000');
 
-const user = window.Telegram?.WebApp?.initDataUnsafe?.user || null;
+// Получаем данные пользователя из Telegram WebApp
+const user = Telegram.WebApp.initDataUnsafe?.user || Telegram.WebApp.initData?.user;
+
 const usernameEl = document.getElementById("username");
 const pointsEl = document.getElementById("points");
 
@@ -106,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (user.first_name) {
             usernameEl.textContent = user.first_name;  // Показываем имя: Niko
         } else if (user.username) {
-            usernameEl.textContent = user.username;   // Если имени нет — юзернейм: Nikoniko94
+            usernameEl.textContent = `@${user.username}`;   // Если имени нет — юзернейм: @Nikoniko94
         } else {
             usernameEl.textContent = `user_${user.id}`;
         }
