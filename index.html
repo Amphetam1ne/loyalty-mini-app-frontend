@@ -15,8 +15,10 @@
         html, body {
             height: 100%;
             background: #000;
-            font-family: 'Arial', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #fff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
@@ -24,105 +26,143 @@
             max-width: 480px;
             min-height: 100vh;
             margin: 0 auto;
-            padding: 0 0 16px 0;
+            padding: 0 0 120px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
         .logo {
-            width: 96px;
-            height: 96px;
-            margin: 32px auto 12px auto;
-            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            margin: 60px auto 40px auto;
+            border-radius: 30px;
             object-fit: cover;
-            box-shadow: 0 4px 24px rgba(255,255,255,0.12);
-            animation: logoFloat 2.2s ease-in-out infinite;
+            box-shadow: 0 20px 60px rgba(255,255,255,0.08);
+            animation: logoFloat 3s ease-in-out infinite;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         @keyframes logoFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.02); }
         }
 
         .username {
-            font-size: 1.35rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 18px;
-            letter-spacing: 0.2px;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
             text-align: center;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .points {
-            font-size: 2.1rem;
+            font-size: 3rem;
             font-weight: 700;
-            margin-bottom: 24px;
+            margin-bottom: 40px;
             text-align: center;
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.22);
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
         .qr-container {
-            background: #111;
-            padding: 18px;
-            border-radius: 22px;
-            box-shadow: 0 6px 32px rgba(0,0,0,0.45);
-            border: 2.5px solid #fff;
-            margin-bottom: 32px;
+            background: rgba(255,255,255,0.03);
+            padding: 32px;
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qr-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         .qr-code {
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
             background: #fff;
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 16px;
             color: #333;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             cursor: pointer;
-            transition: transform 0.12s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qr-code:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
         }
 
         .bottom-menu {
             width: 100%;
             display: flex;
             justify-content: space-between;
-            gap: 8px;
+            gap: 12px;
             position: fixed;
             left: 0;
-            bottom: 16px;
-            background: rgba(0,0,0,0.98);
-            padding: 0 0 12px 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            padding: 20px 16px 40px 16px;
             z-index: 10;
+            backdrop-filter: blur(30px);
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
         .menu-btn {
             flex: 1 1 0;
-            margin: 0 8px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: rgba(255,255,255,0.08);
             color: #fff;
-            font-size: 1.08rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 500;
             border: none;
             border-radius: 16px;
-            padding: 18px 0 16px 0;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
-            transition: all 0.18s ease;
+            padding: 20px 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             outline: none;
-            letter-spacing: 0.2px;
+            letter-spacing: -0.3px;
             text-align: center;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .menu-btn::before {
@@ -132,33 +172,31 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .menu-btn:hover::before {
+        .menu-btn:active::before {
             left: 100%;
         }
 
         .menu-btn:active {
-            transform: scale(0.97);
-            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+            transform: scale(0.96);
+            background: rgba(255,255,255,0.12);
         }
 
         .action-btn {
             flex: 1 1 0;
-            margin: 0 8px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: rgba(255,255,255,0.08);
             color: #fff;
-            font-size: 1.08rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 500;
             border: none;
             border-radius: 16px;
-            padding: 18px 0 16px 0;
-            box-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
-            transition: all 0.18s ease;
+            padding: 20px 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             outline: none;
-            letter-spacing: 0.2px;
+            letter-spacing: -0.3px;
             text-align: center;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
@@ -168,7 +206,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .action-btn::before {
@@ -178,27 +218,27 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .action-btn:hover::before {
+        .action-btn:active::before {
             left: 100%;
         }
 
         .action-btn:active {
-            transform: scale(0.97);
-            box-shadow: 0 2px 10px rgba(245, 87, 108, 0.4);
+            transform: scale(0.96);
+            background: rgba(255,255,255,0.12);
         }
 
         .action-btn .icon {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             margin-bottom: 2px;
         }
 
         .action-btn span {
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 0.85rem;
+            font-weight: 400;
         }
 
         .cafe-info {
@@ -207,14 +247,26 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(0,0,0,0.95);
-            border: 2px solid #f093fb;
-            border-radius: 16px;
-            padding: 20px;
-            max-width: 300px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 320px;
             width: 90%;
             z-index: 1000;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(240, 147, 251, 0.3);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: modalAppear 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
 
         @media (min-width: 481px) {
