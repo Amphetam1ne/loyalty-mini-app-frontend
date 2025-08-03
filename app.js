@@ -119,12 +119,38 @@ document.addEventListener('DOMContentLoaded', function() {
         'loyalty-btn': 'Информация о системе лояльности будет доступна в следующем обновлении'
     };
     
-    Object.entries(buttons).forEach(([id, message]) => {
-        document.getElementById(id).onclick = function() {
-            createHapticFeedback();
-            alert(message);
-        };
-    });
+    // Обработчики кнопок
+    document.getElementById('cafe-btn').onclick = async function() {
+        createHapticFeedback();
+
+        const cafeInfoEl = document.getElementById('cafeInfo');
+        cafeInfoEl.textContent = 'Загрузка...';
+        cafeInfoEl.style.padding = '12px';
+        cafeInfoEl.style.color = '#fff';
+        cafeInfoEl.style.fontSize = '14px';
+        cafeInfoEl.style.borderRadius = '8px';
+        cafeInfoEl.style.backgroundColor = '#1c1c1e';
+        cafeInfoEl.style.marginTop = '8px';
+
+        try {
+            const response = await fetch('http://localhost:8000/api/cafe');
+            if (!response.ok) throw new Error('Сервер вернул ошибку');
+
+            const data = await response.json();
+            cafeInfoEl.textContent = data.text;
+        } catch (error) {
+            console.error('Ошибка загрузки данных о кафе:', error);
+            cafeInfoEl.textContent = 'Не удалось загрузить информацию';
+        }
+    };
+
+// Остальные кнопки пока оставим с alert
+['history-btn', 'loyalty-btn'].forEach(id => {
+    document.getElementById(id).onclick = function() {
+        createHapticFeedback();
+        alert('Этот раздел будет доступен в следующем обновлении');
+    };
+});
     
     // Анимация при клике на QR-код
     qrCodeEl.addEventListener('click', function() {
