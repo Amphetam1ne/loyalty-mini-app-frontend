@@ -113,24 +113,19 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.forEach((el, i) => animateElement(el, i * 120));
     
     // Обработчики кнопок
-    const buttons = {
-        'history-btn': 'История покупок будет доступна в следующем обновлении',
-        'cafe-btn': 'Информация о кафе будет доступна в следующем обновлении',
-        'loyalty-btn': 'Информация о системе лояльности будет доступна в следующем обновлении'
-    };
-    
-    // Обработчики кнопок
     document.getElementById('cafe-btn').onclick = async function() {
         createHapticFeedback();
 
         const cafeInfoEl = document.getElementById('cafeInfo');
+        cafeInfoEl.style.display = 'block';
         cafeInfoEl.textContent = 'Загрузка...';
-        cafeInfoEl.style.padding = '12px';
+        cafeInfoEl.style.padding = '20px';
         cafeInfoEl.style.color = '#fff';
-        cafeInfoEl.style.fontSize = '14px';
-        cafeInfoEl.style.borderRadius = '8px';
-        cafeInfoEl.style.backgroundColor = '#1c1c1e';
-        cafeInfoEl.style.marginTop = '8px';
+        cafeInfoEl.style.fontSize = '16px';
+        cafeInfoEl.style.borderRadius = '16px';
+        cafeInfoEl.style.backgroundColor = 'rgba(0,0,0,0.95)';
+        cafeInfoEl.style.border = '2px solid #f093fb';
+        cafeInfoEl.style.boxShadow = '0 8px 32px rgba(240, 147, 251, 0.3)';
 
         try {
             const response = await fetch('http://localhost:8000/api/cafe');
@@ -138,9 +133,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const data = await response.json();
             cafeInfoEl.textContent = data.text;
+            
+            setTimeout(() => {
+                cafeInfoEl.style.display = 'none';
+            }, 3000);
         } catch (error) {
             console.error('Ошибка загрузки данных о кафе:', error);
             cafeInfoEl.textContent = 'Не удалось загрузить информацию';
+            
+            setTimeout(() => {
+                cafeInfoEl.style.display = 'none';
+            }, 3000);
         }
     };
 
