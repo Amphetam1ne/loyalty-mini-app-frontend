@@ -13,6 +13,16 @@ const usernameEl = document.getElementById("username");
 const pointsEl = document.getElementById("points");
 const logoEl = document.getElementById("logo");
 const qrCodeEl = document.getElementById("qr-code");
+const mainContentEl = document.getElementById("mainContent");
+const cafeOverlayEl = document.getElementById("cafeOverlay");
+const cafeTextEl = document.getElementById("cafeText");
+const closeBtnEl = document.getElementById("closeBtn");
+const cafeBtnEl = document.getElementById("cafe-btn");
+
+// Состояние приложения
+let isCafeActive = false;
+let startX = 0;
+let startY = 0;
 
 // Плавная анимация появления элемента
 function animateElement(element, delay = 0) {
@@ -47,6 +57,47 @@ function generateQRCode(data) {
 // Тактильная обратная связь
 function createHapticFeedback() {
     if ('vibrate' in navigator) navigator.vibrate(30);
+}
+
+// Показать информацию о кафе
+function showCafeInfo() {
+    isCafeActive = true;
+    cafeBtnEl.classList.add('active');
+    mainContentEl.classList.add('overlay-active');
+    cafeOverlayEl.classList.add('active');
+    createHapticFeedback();
+}
+
+// Скрыть информацию о кафе
+function hideCafeInfo() {
+    isCafeActive = false;
+    cafeBtnEl.classList.remove('active');
+    mainContentEl.classList.remove('overlay-active');
+    cafeOverlayEl.classList.remove('active');
+    createHapticFeedback();
+}
+
+// Обработка swipe-жестов
+function handleTouchStart(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+}
+
+function handleTouchEnd(e) {
+    if (!isCafeActive) return;
+    
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const deltaX = startX - endX;
+    const deltaY = startY - endY;
+    
+    // Проверяем, что это горизонтальный свайп
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        if (deltaX > 0) {
+            // Свайп влево - закрываем
+            hideCafeInfo();
+        }
+    }
 }
 
 // Получение данных пользователя из Telegram WebApp
@@ -100,10 +151,8 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Telegram.WebApp доступен:', typeof Telegram !== 'undefined' && Telegram.WebApp);
     
     // Проверяем элементы
-    const cafeBtn = document.getElementById('cafe-btn');
-    const cafeInfoEl = document.getElementById('cafeInfo');
-    console.log('Кнопка cafe-btn найдена:', cafeBtn);
-    console.log('Элемент cafeInfo найден:', cafeInfoEl);
+    console.log('Кнопка cafe-btn найдена:', cafeBtnEl);
+    console.log('Элемент cafeOverlay найден:', cafeOverlayEl);
     
     // Обновляем имя пользователя
     updateUsername();
@@ -120,24 +169,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const elements = [logoEl, usernameEl, pointsEl, qrCodeEl];
     elements.forEach((el, i) => animateElement(el, i * 150));
     
-    // Обработчики кнопок
-    if (cafeBtn) {
-        cafeBtn.onclick = async function() {
+    // Обработчик кнопки "О кафе"
+    if (cafeBtnEl) {
+        cafeBtnEl.onclick = async function() {
             console.log('Кнопка "О кафе" нажата!');
-            createHapticFeedback();
-
-            console.log('Элемент cafeInfo найден:', cafeInfoEl);
             
-            cafeInfoEl.style.display = 'block';
-            cafeInfoEl.textContent = 'Загрузка...';
-            cafeInfoEl.style.padding = '32px';
-            cafeInfoEl.style.color = '#fff';
-            cafeInfoEl.style.fontSize = '18px';
-            cafeInfoEl.style.borderRadius = '20px';
-            cafeInfoEl.style.backgroundColor = 'rgba(0,0,0,0.95)';
-            cafeInfoEl.style.border = '1px solid rgba(255,255,255,0.1)';
-            cafeInfoEl.style.boxShadow = '0 20px 60px rgba(0,0,0,0.5)';
-            cafeInfoEl.style.backdropFilter = 'blur(30px)';
+            if (isCafeActive) {
+                hideCafeInfo();
+                return;
+            }
+            
+            showCafeInfo();
+            cafeTextEl.textContent = 'Загрузка информации...';
 
             try {
                 console.log('Отправляем запрос к API...');
@@ -148,24 +191,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const data = await response.json();
                 console.log('Данные получены:', data);
-                cafeInfoEl.textContent = data.text;
-                
-                setTimeout(() => {
-                    cafeInfoEl.style.display = 'none';
-                }, 4000);
+                cafeTextEl.textContent = data.text;
             } catch (error) {
                 console.error('Ошибка загрузки данных о кафе:', error);
-                cafeInfoEl.textContent = 'Не удалось загрузить информацию';
-                
-                setTimeout(() => {
-                    cafeInfoEl.style.display = 'none';
-                }, 4000);
+                cafeTextEl.textContent = 'Не удалось загрузить информацию';
             }
         };
         console.log('Обработчик для cafe-btn установлен');
     } else {
         console.error('Кнопка cafe-btn не найдена!');
     }
+
+    // Обработчик кнопки закрытия
+    if (closeBtnEl) {
+        closeBtnEl.onclick = function() {
+            hideCafeInfo();
+        };
+    }
+
+    // Обработчики swipe-жестов
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     // Остальные кнопки
     ['history-btn', 'loyalty-btn'].forEach(id => {
